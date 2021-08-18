@@ -87,11 +87,11 @@ async function updateUser(req, res, next) {
         }
 
         let updatedUser = await User.findOneAndUpdate(
-            { username: res.locals.decodedJwt.username },
+            { username:req.user.username },
             req.body,
             { new: true }
         );
-        if (req.body.password || req.body.username!==res.locals.decodedJwt.username ) {
+        if (req.body.password || req.body.username!==req.user.username ) {
             res.status(202).json({ message: "success", payload: updatedUser });
         } else {
             res.json({ message: "success", payload: updatedUser });

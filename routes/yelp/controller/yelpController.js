@@ -31,7 +31,7 @@ const getYelpFromAPI = async(req,res)=>{
 
 const getAllYelps = async(req,res)=>{
     try {
-        let payload = await User.findOne({username:decodedJwt.username})
+        let payload = await User.findOne({username:req.user.username})
             .populate({
                 path:"yelp",
                 model:Yelp,
@@ -46,7 +46,7 @@ const getAllYelps = async(req,res)=>{
 
 const addYelp = async(req,res)=>{
     try {
-        const {name, image, url, phone, rating, price, reviews} = req.body
+        const {name, image, url, phone, rating, price, reviews, location} = req.body
         const newYelp = new Yelp({
             name, 
             image,
@@ -54,10 +54,11 @@ const addYelp = async(req,res)=>{
             phone, 
             rating, 
             price, 
-            reviews
+            reviews,
+            location
         })
         const savedYelp = await newYelp.save()
-        const foundUser = await User.findOne({username:decodedJwt.username})
+        const foundUser = await User.findOne({username:req.user.username})
         foundUser.yelp.push(savedYelp._id)
         await foundUser.save()
         res.json(savedYelp)
@@ -71,7 +72,7 @@ const addYelp = async(req,res)=>{
 const deleteYelp = async (req,res)=>{
     try {
         let deletedYelp = await Yelp.findByIdAndDelete(req.params.id)
-        let foundUser = await User.findOne({username:decodedJwt.username})
+        let foundUser = await User.findOne({username:req.user.username})
         filteredYelp = foundUser.yelp.filter((item)=>{
             if(item._id.toString()!== req.params.id){
                 return item

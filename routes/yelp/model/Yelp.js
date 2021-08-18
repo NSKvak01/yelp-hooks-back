@@ -21,6 +21,9 @@ let yelpSchema = new mongoose.Schema({
     },
     reviews:{
         type:Number
+    },
+    location:{
+        type:String
     }
 })
 
