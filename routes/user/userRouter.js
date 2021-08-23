@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 let passport = require('passport')
-const {signup, login, updateUser, deleteUser } = require("./controller/userController")
+const {signup, login, updateUser, deleteUser, fetchUserInfo } = require("./controller/userController")
 const checkIsEmpty = require("./helpers/checkIsEmpty")
 const checkIsUndefined = require("./helpers/checkIsUndefined")
 const checkIsStrongPassword = require("./helpers/checkIsStrongPassword")
@@ -27,8 +27,8 @@ router.post(
   login
 )
 
-router.put("/update-user-profile", updateUser);
-// router.get("/get-user-info", fetchUserInfo)
+router.put("/update-user-profile", passport.authenticate('jwt-user', {session:false}),updateUser);
+router.get("/get-user-info", passport.authenticate('jwt-user', {session:false}),fetchUserInfo)
 
 router.delete("/delete-user", 
 passport.authenticate('jwt-user', {session:false}),

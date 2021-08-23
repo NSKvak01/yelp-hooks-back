@@ -7,7 +7,7 @@ const jwtOpts = {}
 jwtOpts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken()
 jwtOpts.secretOrKey = keys
 
-const userJWTLoginStrategy = new JwtStrategy(jwtOpts, async(payload, done)=>{
+const userJWTLoginStrategy =  new JwtStrategy(jwtOpts, async(payload, done)=>{
     const username = payload.username
     try {
         if(username){

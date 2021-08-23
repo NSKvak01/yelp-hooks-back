@@ -26,7 +26,7 @@ async function signup(req,res, next){
 }
 
 async function login(req,res,next){
-    const {emailUsername, password} = req.body
+    const {emailUsername, passwordLogin} = req.body
     try {
         let foundUser = await User.findOne({email:emailUsername})
         if(!foundUser){
@@ -34,7 +34,7 @@ async function login(req,res,next){
             if(!foundUser1){
                 throw Error("Check your email/username and password")
             } else {
-                let comparedPassword = await bcrypt.compare(password, foundUser1.password)
+                let comparedPassword = await bcrypt.compare(passwordLogin, foundUser1.password)
                 if(!comparedPassword){
                     throw Error("Check your email/username and password")
                 } else {
@@ -53,7 +53,7 @@ async function login(req,res,next){
                 }
             }
         } else{
-            let comparedPassword = await bcrypt.compare(password, foundUser.password)
+            let comparedPassword = await bcrypt.compare(passwordLogin, foundUser.password)
             if(!comparedPassword){
                 res.status(400).json({message:"error", payload:"Check your email and password"})
             } else {
@@ -104,7 +104,7 @@ async function updateUser(req, res, next) {
     async function fetchUserInfo(req, res, next) {
         try {
             let userInfo = await User.findOne({username:req.user.username}).select(
-                "-password -__v -bocures -_id"
+                "-password -__v -yelp -_id"
             );
             res.json({ message: "success", payload: userInfo });
             } catch (e) {
